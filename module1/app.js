@@ -9,11 +9,10 @@ LunchCheckController.$inject = ['$scope'];
 
 function LunchCheckController($scope) {
   $scope.message = 'You must be hungry. Add something to your menu!'
-  $scope.count_items = 0;
 
   $scope.checkItems = function() {
     if ($scope.lunch_items === undefined) {
-      return null;
+      $scope.message = 'Please enter data first!';
     } else {
       var splits = $scope.lunch_items.split(',');
       if (splits.length <= 3) {
