@@ -13,7 +13,8 @@ function LunchCheckController($scope) {
   $scope.checkItems = function() {
     if ($scope.lunch_items === undefined) {
       $scope.message = 'Please enter data first!';
-      $scope.message_style = 'color:red;border-color:red;border-style:solid;border-width:.5px;'
+      $scope.message_style = 'red'
+      $scope.input_style = 'border-color:red;'
     } else {
       var splits = $scope.lunch_items.split(',');
       if (splits.length <= 3) {
@@ -21,7 +22,8 @@ function LunchCheckController($scope) {
       } else if (splits.length > 3) {
         $scope.message = 'Too much!'
       }
-      $scope.message_style = 'color:green;border-color:green;border-style:solid;border-width:.5px;'
+      $scope.message_style = 'green';
+      $scope.input_style = 'border-color:green';
     }
   };
 }
