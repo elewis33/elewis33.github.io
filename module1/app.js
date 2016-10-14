@@ -13,6 +13,7 @@ function LunchCheckController($scope) {
   $scope.checkItems = function() {
     if ($scope.lunch_items === undefined) {
       $scope.message = 'Please enter data first!';
+      $scope.message_style = 'color:red;border-color:red;border-style:solid;'
     } else {
       var splits = $scope.lunch_items.split(',');
       if (splits.length <= 3) {
@@ -20,6 +21,7 @@ function LunchCheckController($scope) {
       } else if (splits.length > 3) {
         $scope.message = 'Too much!'
       }
+      $scope.message_style = 'color:green;border-color:green;border-style:solid;'
     }
   };
 }
