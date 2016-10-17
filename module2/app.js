@@ -10,6 +10,28 @@ angular.module('ControllerAsApp', [])
 ShoppingListController1.$inject = ['ShoppingListFactory'];
 function ShoppingListController1(ShoppingListFactory) {
   var list1 = this;
+  var shoppingList1 = [
+  {
+    name: "Milk",
+    quantity: "2"
+  },
+  {
+    name: "Bread",
+    quantity: "2"
+  },
+  {
+    name: "Bell Peppers",
+    quantity: "4"
+  },
+  {
+    name: "Bananas",
+    quantity: "5"
+  },
+  {
+    name: "Eggs",
+    quantity: "2 dozen"
+  }
+];
 
   // Use factory to create new shopping list service
   var shoppingList = ShoppingListFactory();
