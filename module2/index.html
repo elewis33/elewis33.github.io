@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Shopping List Check Off</title>
+    <title>Test App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
@@ -22,29 +22,36 @@
       }
     </style>
   </head>
-<body>
+  <script type="text/javascript" src="angular.min.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+<body ng-app="ShoppingListCheckOff">
   <div class="container">
-  <h1>Shopping List Check Off</h1>
+  <h1>Test App</h1>
 
   <div class="row">
 
     <!-- To Buy List -->
-    <div class="col-md-6">
-     <h2>To Buy:</h2>
+    <div class="col-md-6" ng-controller="ToBuyController as available" >
+     <h2>Available:</h2>
      <ul>
-       <li>Buy 10 cookies <button class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Bought</button></li>
-       <li>Buy 10 cookies <button class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Bought</button></li>
+       <li ng-repeat="item in available.shoppingList">{{ item.quantity }} {{ item.name}}
+         <button class="btn btn-default" ng-click="available.buyItem(item.name, item.quantity)">
+           <span class="glyphicon glyphicon-plus"></span> Get item</button>
+       </li>
      </ul>
-     <div class="emptyMessage">Everything is bought!</div>
+     <div class="emptyMessage" ng-if="!available.stillSomeLeft">Everything is bought!</div>
+     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's more to go.</div>
     </div>
 
     <!-- Already Bought List -->
-    <div class="col-md-6">
-     <h2>Already Bought:</h2>
+    <div class="col-md-6" ng-controller="AlreadyBoughtController as bought">
+     <h2>Added:</h2>
      <ul>
-       <li>Bought 10 cookies</li>
+       <li ng-repeat="item in bought.shoppingList">Bought: {{ item.quantity }} {{ item.name }}
+       </li>
      </ul>
-     <div class="emptyMessage">Nothing bought yet.</div>
+     <div class="emptyMessage" ng-if="!available.stillSomeLeft">Everything is bought!</div>
+     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's more to go.</div>
     </div>
   </div>
 </div>
