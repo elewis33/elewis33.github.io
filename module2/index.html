@@ -39,8 +39,7 @@
            <span class="glyphicon glyphicon-plus"></span>Buy item</button>
        </li>
      </ul>
-     <div class="emptyMessage" ng-if="!available.isAvailableEmpty()">There's more to go. Keep on shopping!</div>
-     <div class="emptyMessage" ng-if="available.isAvailableEmpty()">All done!</div>
+     <div class="emptyMessage" ng-if="available.isAvailableEmpty()">Everything is bought!</div>
     </div>
 
     <!-- Already Bought List -->
@@ -50,6 +49,7 @@
        <li ng-repeat="item in bought.shoppingList">Bought: {{ item.quantity }} {{ item.name }}
        </li>
      </ul>
+      <div class="emptyMessage" ng-if="bought.isBoughtEmpty()">Nothing bought yet!</div>
     </div>
   </div>
 </div>

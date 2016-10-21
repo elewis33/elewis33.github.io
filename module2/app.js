@@ -31,6 +31,7 @@ function AlreadyBoughtController(ShoppingListCheckOffService) {
 
   // get the list of items bought
   list2.shoppingList = ShoppingListCheckOffService.getBoughtItems();
+  list2.isBoughtEmpty = ShoppingListCheckOffService.isBoughtEmpty;
 }
 
 
