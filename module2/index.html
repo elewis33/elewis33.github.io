@@ -35,12 +35,12 @@
      <h2>Available:</h2>
      <ul>
        <li ng-repeat="item in available.shoppingList">{{ item.quantity }} {{ item.name}}
-         <button class="btn btn-default" ng-click="available.buyItem(item.name, item.quantity)">
+         <button class="btn btn-default" ng-click="available.buyItem($index)">
            <span class="glyphicon glyphicon-plus"></span> Get item</button>
        </li>
      </ul>
-     <div class="emptyMessage" ng-if="!available.stillSomeLeft">Everything is bought!</div>
-     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's more to go.</div>
+     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's {{ available.itemCount }} more to go.</div>
+     <div class="emptyMessage" ng-if="!available.stillSomeLeft">All done!</div>
     </div>
 
     <!-- Already Bought List -->
@@ -50,8 +50,8 @@
        <li ng-repeat="item in bought.shoppingList">Bought: {{ item.quantity }} {{ item.name }}
        </li>
      </ul>
-     <div class="emptyMessage" ng-if="!available.stillSomeLeft">Everything is bought!</div>
-     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's more to go.</div>
+     <!-- <div class="emptyMessage" ng-if="!available.stillSomeLeft">Well done!</div>
+     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's more to go.</div> -->
     </div>
   </div>
 </div>

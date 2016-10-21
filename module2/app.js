@@ -14,10 +14,10 @@ function ToBuyController(ShoppingListCheckOffService) {
   // get available items from the service
   list1.shoppingList = ShoppingListCheckOffService.getAvailableItems();
   list1.stillSomeLeft = ShoppingListCheckOffService.stillSomeLeft();
+  list1.itemCount = ShoppingListCheckOffService.countAvailableItems();
 
-  list1.buyItem = function (itemName, itemQuantity) {
-    console.log('Buying item name ' + itemName + ' and quantity ' + itemQuantity);
-    ShoppingListCheckOffService.buyItem(itemName, itemQuantity);
+  list1.buyItem = function (idx) {
+    ShoppingListCheckOffService.buyItem(idx);
   };
 }
 
@@ -29,7 +29,6 @@ function AlreadyBoughtController(ShoppingListCheckOffService) {
 
   // initialize the shopping list
   list2.shoppingList = ShoppingListCheckOffService.getBoughtItems();
-  console.log(list2.shoppingList);
 }
 
 
@@ -62,37 +61,49 @@ function ShoppingListCheckOffService() {
     }
   ];
 
-  service.buyItem = function (itemName, quantity) {
-    var item = {
-      name: itemName,
-      quantity: quantity
-    };
-    boughtItems.push(item);
-    console.log(boughtItems);
-
-    // TODO remove the bought item from the availableItems list
-
+  service.buyItem = function (idx) {
+    if (service.stillSomeLeft()) {
+      var item = service.getAvailableItem(idx);
+      boughtItems.push(item);
+      service.removeItem(idx);
+    }
   };
 
   service.removeItem = function (itemIndex) {
-    items.splice(itemIndex, 1);
+    availableItems.splice(itemIndex, 1);
   };
 
   service.stillSomeLeft = function() {
-    if (availableItems.length != 0){
+    if (availableItems.length >0) {
+      console.log(availableItems.length);
+      // console.log(true);
       return true;
     } else {
+      // console.log(availableItems.length);
+      // console.log(false);
       return false;
     }
   };
 
+  // expose/return the available items array
   service.getAvailableItems = function () {
     return availableItems;
   };
 
+  // expose/return the bought items array
   service.getBoughtItems = function () {
     return boughtItems;
   };
+
+  // get one specific item, based on the index
+  service.getAvailableItem = function (idx) {
+    var item = availableItems[idx];
+    return item;
+  };
+
+  service.countAvailableItems = function () {
+    return availableItems.length;
+  }
 }
 
 })();
