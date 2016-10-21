@@ -13,21 +13,23 @@ function ToBuyController(ShoppingListCheckOffService) {
 
   // get available items from the service
   list1.shoppingList = ShoppingListCheckOffService.getAvailableItems();
-  list1.stillSomeLeft = ShoppingListCheckOffService.stillSomeLeft();
-  list1.itemCount = ShoppingListCheckOffService.countAvailableItems();
 
+  // find out of there are any items left to buy
+  list1.isAvailableEmpty = ShoppingListCheckOffService.isAvailableEmpty;
+
+  // buy an item, specifying the index number
   list1.buyItem = function (idx) {
     ShoppingListCheckOffService.buyItem(idx);
   };
 }
 
 
-// LIST #2 - controller
+//  Controller for items already bought
 AlreadyBoughtController.$inject = ['ShoppingListCheckOffService'];
 function AlreadyBoughtController(ShoppingListCheckOffService) {
   var list2 = this;
 
-  // initialize the shopping list
+  // get the list of items bought
   list2.shoppingList = ShoppingListCheckOffService.getBoughtItems();
 }
 
@@ -37,8 +39,8 @@ function ShoppingListCheckOffService() {
   var service = this;
 
   // initialize the lists
-  var boughtItems = [];
-  var availableItems = [
+  service.boughtItems = [];
+  service.availableItems = [
     {
       name: "gallons of milk",
       quantity: "2"
@@ -62,48 +64,39 @@ function ShoppingListCheckOffService() {
   ];
 
   service.buyItem = function (idx) {
-    if (service.stillSomeLeft()) {
-      var item = service.getAvailableItem(idx);
-      boughtItems.push(item);
-      service.removeItem(idx);
-    }
+    var item = service.getAvailableItem(idx);
+    service.boughtItems.push(item);
+    service.removeItem(idx);
   };
 
+  // pull the bought item off the available list
   service.removeItem = function (itemIndex) {
-    availableItems.splice(itemIndex, 1);
-  };
-
-  service.stillSomeLeft = function() {
-    if (availableItems.length >0) {
-      console.log(availableItems.length);
-      // console.log(true);
-      return true;
-    } else {
-      // console.log(availableItems.length);
-      // console.log(false);
-      return false;
-    }
+    service.availableItems.splice(itemIndex, 1);
   };
 
   // expose/return the available items array
   service.getAvailableItems = function () {
-    return availableItems;
+    return service.availableItems;
   };
 
   // expose/return the bought items array
   service.getBoughtItems = function () {
-    return boughtItems;
+    return service.boughtItems;
   };
 
   // get one specific item, based on the index
   service.getAvailableItem = function (idx) {
-    var item = availableItems[idx];
+    var item = service.availableItems[idx];
     return item;
   };
 
-  service.countAvailableItems = function () {
-    return availableItems.length;
-  }
+  service.isAvailableEmpty = function () {
+    return service.availableItems.length === 0;
+  };
+
+  service.isBoughtEmpty = function () {
+      return service.boughtItems.length === 0;
+  };
 }
 
 })();

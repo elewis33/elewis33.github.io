@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Test App</title>
+    <title>Shopping List Checkoff App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
@@ -26,32 +26,30 @@
   <script type="text/javascript" src="app.js"></script>
 <body ng-app="ShoppingListCheckOff">
   <div class="container">
-  <h1>Test App</h1>
+  <h1>Shopping List Checkoff App</h1>
 
   <div class="row">
 
     <!-- To Buy List -->
     <div class="col-md-6" ng-controller="ToBuyController as available" >
-     <h2>Available:</h2>
+     <h2>Stuff I need:</h2>
      <ul>
        <li ng-repeat="item in available.shoppingList">{{ item.quantity }} {{ item.name}}
          <button class="btn btn-default" ng-click="available.buyItem($index)">
-           <span class="glyphicon glyphicon-plus"></span> Get item</button>
+           <span class="glyphicon glyphicon-plus"></span>Buy item</button>
        </li>
      </ul>
-     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's {{ available.itemCount }} more to go.</div>
-     <div class="emptyMessage" ng-if="!available.stillSomeLeft">All done!</div>
+     <div class="emptyMessage" ng-if="!available.isAvailableEmpty()">There's more to go. Keep on shopping!</div>
+     <div class="emptyMessage" ng-if="available.isAvailableEmpty()">All done!</div>
     </div>
 
     <!-- Already Bought List -->
     <div class="col-md-6" ng-controller="AlreadyBoughtController as bought">
-     <h2>Added:</h2>
+     <h2>Stuff I bought:</h2>
      <ul>
        <li ng-repeat="item in bought.shoppingList">Bought: {{ item.quantity }} {{ item.name }}
        </li>
      </ul>
-     <!-- <div class="emptyMessage" ng-if="!available.stillSomeLeft">Well done!</div>
-     <div class="emptyMessage" ng-if="available.stillSomeLeft">Keep on shopping! There's more to go.</div> -->
     </div>
   </div>
 </div>
