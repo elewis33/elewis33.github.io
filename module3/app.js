@@ -1,27 +1,30 @@
 (function () {
 'use strict';
 
-angular.module('MenuCategoriesApp', [])
-.controller('MenuCategoriesController', MenuCategoriesController)
-.service('MenuCategoriesService', MenuCategoriesService)
-.constant('ApiBasePath', "https://davids-restaurant.herokuapp.com");
+angular.module('NarrowItDownApp', [])
+.controller('NarrowItDownController', NarrowItDownController)
+.service('MenuSearchService', MenuSearchService)
+.directive('foundItems', FoundItemsDirective)
+.constant('ApiPath', "https://davids-restaurant.herokuapp.com/menu_items.json");
 
 
-MenuCategoriesController.$inject = ['MenuCategoriesService'];
-function MenuCategoriesController(MenuCategoriesService) {
+NarrowItDownController.$inject = ['MenuSearchService'];
+function NarrowItDownController(MenuSearchService) {
   var menu = this;
+  var menu.searchTerm = '';
 
-  var promise = MenuCategoriesService.getMenuCategories();
+  var promise = MenuSearchService.getMatchedMenuItems();
 
   promise.then(function (response) {
-    menu.categories = response.data;
+    menu.data = response.data;
+    console.log(menu.data);
   })
   .catch(function (error) {
     console.log("Something went terribly wrong.");
   });
 
-  menu.logMenuItems = function (shortName) {
-    var promise = MenuCategoriesService.getMenuForCategory(shortName);
+  menu.logMenuItems = function (searchTerm) {
+    var promise = MenuSearchService.getMatchedMenuItems();
 
     promise.then(function (response) {
       console.log(response.data);
@@ -34,28 +37,16 @@ function MenuCategoriesController(MenuCategoriesService) {
 }
 
 
-MenuCategoriesService.$inject = ['$http', 'ApiBasePath']
-function MenuCategoriesService($http, ApiBasePath) {
+MenuSearchService.$inject = ['$http', 'ApiPath']
+function MenuSearchService($http, ApiPath) {
   var service = this;
+  service.found = [];
 
-  service.getMenuCategories = function () {
+  service.getMatchedMenuItems = function (menu.searchTerm) {
+    console.log('running getMatchedMenuItems');
     var response = $http({
       method: "GET",
-      url: (ApiBasePath + "/categories.json")
-      console.log(url);
-    });
-
-    return response;
-  };
-
-
-  service.getMenuForCategory = function (shortName) {
-    var response = $http({
-      method: "GET",
-      url: (ApiBasePath + "/menu_items.json"),
-      params: {
-        category: shortName
-      }
+      url: (ApiPath)
     });
 
     return response;
