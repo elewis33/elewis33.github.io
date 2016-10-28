@@ -12,12 +12,10 @@ function FoundItemsDirective() {
     templateUrl: 'foundItems.html',
     scope: {
       items: '<',
-      myTitle: '@title',
-      badRemove: '=',
       onRemove: '&'
     },
     controller: FoundItemsDirectiveController,
-    controllerAs: 'list',
+    controllerAs: 'found',
     bindToController: true
   };
 
@@ -25,18 +23,6 @@ function FoundItemsDirective() {
 }
 
 function FoundItemsDirectiveController() {
-  var list = this;
-
-  list.itemsInList = function () {
-    for (var i = 0; i < list.items.length; i++) {
-      var name = list.items[i].name;
-      if (name.toLowerCase().indexOf("cookie") !== -1) {
-        return true;
-      }
-    }
-
-    return false;
-  };
 }
 
 NarrowItDownController.$inject = ['MenuSearchService'];
@@ -47,24 +33,12 @@ function NarrowItDownController(MenuSearchService) {
   var promise = MenuSearchService.getMenuItems();
 
   promise.then(function (response) {
-    menu.items = response.data.menu_items;
-    console.log(menu.items);
+    menu.found = response.data.menu_items;
+    console.log(menu.menu_items);
   })
   .catch(function (error) {
     console.log("Something went terribly wrong.");
   });
-
-  // menu.logMenuItems = function () {
-  //   var promise = MenuSearchService.getMenuItems();
-  //
-  //   promise.then(function (response) {
-  //     console.log(response.data);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   })
-  // };
-
 }
 
 
@@ -82,7 +56,6 @@ function MenuSearchService($http, ApiPath) {
 
     return response;
   };
-
 }
 
 })();

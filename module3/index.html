@@ -16,23 +16,15 @@
     <div class="form-group">
       <input type="text" placeholder="search term" class="form-control" ng-model="menu.searchTerm">
     </div>
+
     <div class="form-group narrow-button">
       <button class="btn btn-primary">Narrow It Down</button>
     </div>
 
-    <!-- <div class="menu_items col-md-12">
-      <table class="table table-hover">
-        <thead>
-          <th width="5%">Code</th><th width="20%">Name</th><th width="75%">Description</th><th></th>
-        </thead>
-        <tr ng-repeat="item in menu.items">
-          <td>{{ item.short_name }}</td><td>{{ item.name }}</td><td>{{ item.description }}</td>
-          <td><button class="button" ng-click="menu.removeItem()">Remove</button></td>
-        </tr>
-      </table>
-    </div> -->
-    <!-- found-items should be implemented as a component -->
-    <found-items found-items="menu.items" on-remove="...."></found-items>
+    <found-items
+      items="menu.found"
+      >
+    </found-items>
   </div>
 
 </body>
