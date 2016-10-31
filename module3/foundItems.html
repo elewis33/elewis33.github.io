@@ -5,7 +5,7 @@
     </thead>
     <tr ng-repeat="item in found.items">
       <td>{{ item.short_name }}</td><td>{{ item.name }}</td><td>{{ item.description }}</td>
-      <td><button class="button" ng-click="found.removeItem()">Remove</button></td>
+      <td><button class="button" ng-click="found.onRemove({index: $index})">Remove</button></td>
     </tr>
   </table>
 </div>

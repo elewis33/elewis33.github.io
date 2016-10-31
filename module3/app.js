@@ -25,37 +25,101 @@ function FoundItemsDirective() {
 function FoundItemsDirectiveController() {
 }
 
+
 NarrowItDownController.$inject = ['MenuSearchService'];
-function NarrowItDownController(MenuSearchService) {
-  var menu = this;
-  menu.searchTerm = '';
+    function NarrowItDownController(MenuSearchService) {
+        var menu = this;
+        menu.searchTerm = '';
+        menu.pendingTimeout = 100;
+        menu.isPending = false;
+        menu.showMessage = false;
+        menu.found = [];
 
-  var promise = MenuSearchService.getMenuItems();
+        menu.searchItems = function () {
+            menu.showMessage = false;
+            menu.isPending = true;
+            menu.found = [];
 
-  promise.then(function (response) {
-    menu.found = response.data.menu_items;
-    console.log(menu.menu_items);
-  })
-  .catch(function (error) {
-    console.log("Something went terribly wrong.");
-  });
-}
+            MenuSearchService.getMatchedMenuItems(menu.searchTerm, menu.pendingTimeout)
+                .then(function (response) {
+                    menu.found = response;
+                    console.info('found:', menu.found);
+                })
+                .catch(function (response) {
+                    menu.found = response;
+                    console.info('catch:', menu.found);
+                })
+                .finally(function () {
+                    menu.isPending = false;
+                    menu.showMessage = menu.isEmpty();
+                });
+        }
 
+        menu.isEmpty = function () {
+            return menu.found.length == 0;
+        }
 
-MenuSearchService.$inject = ['$http', 'ApiPath']
-function MenuSearchService($http, ApiPath) {
-  var service = this;
-  service.found = [];
+        menu.removeItem = function (itemIndex) {
+            var removedItem = menu.found.splice(itemIndex, 1);
+            console.log('removed:', removedItem);
 
-  service.getMenuItems = function () {
-    console.log('running getMenuItems');
-    var response = $http({
-      method: "GET",
-      url: (ApiPath)
-    });
+            return removedItem;
+        };
 
-    return response;
-  };
+        menu.setPendingTimeout = function (timeout) {
+            menu.pendingTimeout = timeout;
+        }
+    }
+
+MenuSearchService.$inject = ['$q', '$http', 'ApiPath', '$timeout'];
+function MenuSearchService($q, $http, apiPath, $timeout) {
+    var service = this;
+
+    service.getMatchedMenuItems = function (searchTerm, pendingTimeoutForEmptySearchTerm) {
+        var deferred = $q.defer();
+        var result = [];
+
+        searchTerm = (searchTerm || '').trim().toLowerCase();
+
+        if (searchTerm === '') {
+            // here we simulate a pending
+            $timeout(function () {
+                deferred.reject(result);
+            }, pendingTimeoutForEmptySearchTerm || 100);
+
+            return deferred.promise;
+        }
+
+        $http({
+            method: 'GET',
+            url: apiPath
+
+        }).then(function (response) {
+            var menu = response.data.menu_items;
+
+            menu.forEach(function (dish) {
+                var description = dish.description.toLowerCase();
+
+                if (description.indexOf(searchTerm) >= 0) {
+                    result.push(dish);
+                    console.log('description:', '"' + dish.description + '"');
+                }
+            });
+
+            deferred.resolve(result);
+
+        }).catch(function (response) {
+            result.push({
+                "name": "error",
+                "short_name": response.status,
+                "description": response.statusText || response
+            });
+
+            deferred.reject(result);
+        });
+
+        return deferred.promise;
+    };
 }
 
 })();
