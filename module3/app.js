@@ -82,7 +82,6 @@ function MenuSearchService($q, $http, apiPath, $timeout) {
         searchTerm = (searchTerm || '').trim().toLowerCase();
 
         if (searchTerm === '') {
-            // here we simulate a pending
             $timeout(function () {
                 deferred.reject(result);
             }, pendingTimeoutForEmptySearchTerm || 100);
@@ -97,12 +96,12 @@ function MenuSearchService($q, $http, apiPath, $timeout) {
         }).then(function (response) {
             var menu = response.data.menu_items;
 
-            menu.forEach(function (dish) {
-                var description = dish.description.toLowerCase();
+            menu.forEach(function (item) {
+                var description = item.description.toLowerCase();
 
                 if (description.indexOf(searchTerm) >= 0) {
-                    result.push(dish);
-                    console.log('description:', '"' + dish.description + '"');
+                    result.push(item);
+                    console.log('description:', '"' + item.description + '"');
                 }
             });
 
