@@ -1,11 +1,10 @@
-<div class="menu_items col-md-12">
+
   <table class="table table-hover">
     <thead>
       <th width="5%">Code</th><th width="20%">Name</th><th width="75%">Description</th><th></th>
     </thead>
     <tr ng-repeat="item in found.items">
       <td>{{ item.short_name }}</td><td>{{ item.name }}</td><td>{{ item.description }}</td>
-      <td><button class="button" ng-click="found.onRemove({index: $index})">Remove</button></td>
+      <td><button class="button" ng-click="found.onRemove({index: $index})">Don't Want This One!</button></td>
     </tr>
   </table>
-</div>
